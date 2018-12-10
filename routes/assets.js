@@ -18,6 +18,17 @@ router.post('/', upload.single('assetFile'), function (req, res) {
 
   console.log('assetName: ' + req.body.assetName);
 
+  let jsonData = fs.readFileSync(__dirname + '/../storages/assets.json', 'utf8');
+  let assets = JSON.parse(jsonData);
+  let mapSetList =  assets.mapSetList;
+  mapSetList[req.body.assetName] = req.file.filename;
+
+  let mapList = assets.mapList;
+  mapList.push(req.body.assetName);
+
+  let writeAssetData = {'mapSetList': mapSetList, 'mapList': mapList};
+  fs.writeFileSync(__dirname + '/../storages/assets.json', JSON.stringify(writeAssetData), 'utf8');
+
   res.send({result: 'success'});
 });
 
