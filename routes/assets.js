@@ -12,9 +12,11 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', upload.single('assetFile'), function (req, res) {
-  console.log('file: ' + req.file.filename);
-  console.log('file: ' + req.file.path);
-  console.log('file: ' + req.file.originalname);
+  console.log('filename: ' + req.file.filename);
+  console.log('path: ' + req.file.path);
+  console.log('originalname: ' + req.file.originalname);
+
+  console.log('assetName: ' + req.body.assetName);
 
   res.send({result: 'success'});
 });
