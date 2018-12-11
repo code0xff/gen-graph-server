@@ -39,4 +39,25 @@ router.post('/', upload.single('assetFile'), function (req, res) {
   res.send({result: 'success'});
 });
 
+router.delete('/', function(req, res, next) {
+  console.log(req.body);
+  let deleteList = req.body.deleteList;
+
+  let jsonData = fs.readFileSync(__dirname + '/../storages/assets.json', 'utf8');
+  let assets = JSON.parse(jsonData);
+  let mapSetList =  assets.mapSetList;
+  let mapList = assets.mapList;
+  let index = 0;
+
+  for (let i = 0; i < deleteList.length; i++) {
+    delete mapSetList[deleteList[i]];
+    index = mapList.indexOf(deleteList[i]);
+    mapList.splice(index, 1);
+  }
+  let writeAssetData = {'mapSetList': mapSetList, 'mapList': mapList};
+  fs.writeFileSync(__dirname + '/../storages/assets.json', JSON.stringify(writeAssetData), 'utf8');
+
+  res.send({result: 'success'});
+});
+
 module.exports = router;
