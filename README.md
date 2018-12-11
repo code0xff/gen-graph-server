@@ -4,8 +4,13 @@
 
 2. install modules using npm.
 
+```
 $ cd gen-graph-server
 $ npm install
+```
 
 3. run
+
+```
 $ npm start
+```
