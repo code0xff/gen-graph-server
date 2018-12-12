@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
   res.send(dataObject);
 });
 
-router.post('/', upload.single('assetFile'), function (req, res) {
+router.post('/upload', upload.single('assetFile'), function (req, res) {
   console.log('assetName: ' + req.body.assetName);
 
   let jsonData = fs.readFileSync(__dirname + '/../storages/assets.json', 'utf8');
@@ -37,6 +37,31 @@ router.post('/', upload.single('assetFile'), function (req, res) {
   fs.writeFileSync(__dirname + '/../storages/assets.json', JSON.stringify(writeAssetData), 'utf8');
 
   res.send({result: 'success'});
+});
+
+
+router.post('/save', function (req, res) {
+  console.log(req.body);
+
+  let map = '';
+  const row = parseInt(req.body.row);
+  const col = parseInt(req.body.col);
+
+  let index = 0;
+  for (let i = 0; i < row; i++) {
+    for (let j = 0; j < col; j++) {
+      map += String.fromCharCode(65 + parseInt(req.body.map[index]));
+      index += 1;
+    }
+    map += '\n';
+  }
+
+  console.log(map);
+
+  let fileName = req.body.fileName + '_' + new Date().getTime();
+  fs.writeFileSync(__dirname + '/../temp/' + fileName +'.txt', map, 'utf8');
+
+  res.download(__dirname + '/../temp/' + fileName +'.txt');
 });
 
 router.delete('/', function(req, res, next) {
