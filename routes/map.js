@@ -1,19 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
-var multer = require('multer');
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/map/')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname)
-  }
-});
-var upload = multer({ storage: storage });
+const multer = require('multer');
+const upload = multer({dest: 'public/map/'});
 
 router.post('/load', upload.single('mapFile'), function (req, res) {
-  let jsonData = fs.readFileSync(__dirname + '/../public/map/' + req.body.fileName, 'utf8');
+  let jsonData = fs.readFileSync(__dirname + '/../public/map/' + req.file.filename, 'utf8');
   let mapData = JSON.parse(jsonData);
 
   res.send(mapData);
